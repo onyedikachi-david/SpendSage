@@ -6,29 +6,29 @@ import { DocBase } from 'use-fireproof'
 // Initialize the database
 export const db = fireproof('spendsage')
 
-// Create index functions for queries
-const byTypeAndDateIndex = (doc: DocBase & { date?: string; type: string }) => {
-  if (doc.type === 'transaction' && doc.date) {
-    return [[doc.type, new Date(doc.date).getTime()]]
-  }
-  return [[doc.type]]
-}
-
-const byTypeIndex = (doc: DocBase & { type: string }) => {
+// Map functions for queries
+const byType = (doc: DocBase & { type: string }) => {
   if (doc.type) {
     return [[doc.type]]
   }
   return []
 }
 
-const byCategoryIndex = (doc: DocBase & { category?: string; date?: string; type: string }) => {
+const byTypeAndDate = (doc: DocBase & { type: string; date?: string }) => {
+  if (doc.type === 'transaction' && doc.date) {
+    return [[doc.type, new Date(doc.date).getTime()]]
+  }
+  return [[doc.type]]
+}
+
+const byCategory = (doc: DocBase & { type: string; category?: string; date?: string }) => {
   if (doc.type === 'transaction' && doc.category && doc.date) {
     return [[doc.category, new Date(doc.date).getTime()]]
   }
   return []
 }
 
-const byAccountIndex = (doc: DocBase & { account?: string; date?: string; type: string }) => {
+const byAccount = (doc: DocBase & { type: string; account?: string; date?: string }) => {
   if (doc.type === 'transaction' && doc.account && doc.date) {
     return [[doc.account, new Date(doc.date).getTime()]]
   }
@@ -38,12 +38,12 @@ const byAccountIndex = (doc: DocBase & { account?: string; date?: string; type: 
 // React hooks for data access
 export function useTransactions() {
   const { useLiveQuery } = useFireproof(db)
-  return useLiveQuery<Transaction>(byTypeIndex, { key: ['transaction'], descending: true })
+  return useLiveQuery(byTypeAndDate, { key: ['transaction'], descending: true })
 }
 
 export function useTransactionsByDateRange(startDate: Date, endDate: Date) {
   const { useLiveQuery } = useFireproof(db)
-  return useLiveQuery<Transaction>(byTypeAndDateIndex, {
+  return useLiveQuery(byTypeAndDate, {
     range: [
       ['transaction', startDate.getTime()],
       ['transaction', endDate.getTime()]
@@ -53,27 +53,27 @@ export function useTransactionsByDateRange(startDate: Date, endDate: Date) {
 
 export function useTransactionsByCategory(category: string) {
   const { useLiveQuery } = useFireproof(db)
-  return useLiveQuery<Transaction>(byCategoryIndex, { key: [category], descending: true })
+  return useLiveQuery(byCategory, { key: [category], descending: true })
 }
 
 export function useTransactionsByAccount(account: string) {
   const { useLiveQuery } = useFireproof(db)
-  return useLiveQuery<Transaction>(byAccountIndex, { key: [account], descending: true })
+  return useLiveQuery(byAccount, { key: [account], descending: true })
 }
 
 export function useCategories() {
   const { useLiveQuery } = useFireproof(db)
-  return useLiveQuery<Category>(byTypeIndex, { key: ['category'] })
+  return useLiveQuery(byType, { key: ['category'] })
 }
 
 export function useAccounts() {
   const { useLiveQuery } = useFireproof(db)
-  return useLiveQuery<Account>(byTypeIndex, { key: ['account'] })
+  return useLiveQuery(byType, { key: ['account'] })
 }
 
 export function useBudgets() {
   const { useLiveQuery } = useFireproof(db)
-  return useLiveQuery<Budget>(byTypeIndex, { key: ['budget'] })
+  return useLiveQuery(byType, { key: ['budget'] })
 }
 
 // Helper function to generate IDs

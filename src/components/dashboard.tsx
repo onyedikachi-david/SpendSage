@@ -1,7 +1,6 @@
-import { FormEvent } from "react"
+import { FormEvent, useState } from "react"
 import { format } from "date-fns"
-import { useFireproof } from 'use-fireproof'
-import { db } from '@/lib/store'
+import { addTransaction, useTransactions } from '@/lib/store'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -9,53 +8,79 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Transaction } from "@/types"
+import { toast } from "sonner"
 
 export default function Dashboard() {
-  const { useLiveQuery } = useFireproof(undefined, db)
-  
-  // Query all transactions
-  const { docs: transactions } = useLiveQuery<Transaction>('date', {
-    descending: true
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    date: format(new Date(), 'yyyy-MM-dd'),
+    amount: '',
+    category: '',
+    account: '',
+    description: '',
+    isExpense: true
   })
+  
+  // Query all transactions using the hook from store
+  const { docs: transactions } = useTransactions() as unknown as { docs: Transaction[] }
 
   // Calculate totals
   const totalIncome = transactions.reduce((acc, tx) => {
-    return acc + (!tx.isExpense ? tx.amount : 0)
+    return acc + (!tx.isExpense ? Number(tx.amount) : 0)
   }, 0)
 
   const totalExpenses = transactions.reduce((acc, tx) => {
-    return acc + (tx.isExpense ? tx.amount : 0)
+    return acc + (tx.isExpense ? Number(tx.amount) : 0)
   }, 0)
 
   const categories = [...new Set(transactions.map(tx => tx.category))].length
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const form = e.currentTarget
-    const formData = new FormData(form)
     
-    const data = {
-      date: formData.get('date') as string,
-      amount: formData.get('amount') as string,
-      category: formData.get('category') as string,
-      account: formData.get('account') as string,
-      description: formData.get('description') as string,
-      isExpense: formData.get('expense') === 'on'
+    // Validate form
+    if (!formData.amount || isNaN(parseFloat(formData.amount))) {
+      toast.error("Please enter a valid amount")
+      return
+    }
+    if (!formData.category) {
+      toast.error("Please select a category")
+      return
+    }
+    if (!formData.account) {
+      toast.error("Please select an account")
+      return
     }
 
+    setIsSubmitting(true)
+    
     try {
-      await db.put({
+      await addTransaction({
         type: 'transaction',
-        date: format(new Date(data.date), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
-        amount: parseFloat(data.amount),
-        category: data.category,
-        account: data.account,
-        description: data.description,
-        isExpense: data.isExpense,
+        date: format(new Date(formData.date), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
+        amount: parseFloat(formData.amount),
+        category: formData.category,
+        account: formData.account,
+        description: formData.description || '',
+        isExpense: formData.isExpense,
       })
-      form.reset()
+      
+      // Reset form
+      setFormData({
+        date: format(new Date(), 'yyyy-MM-dd'),
+        amount: '',
+        category: '',
+        account: '',
+        description: '',
+        isExpense: true
+      })
+      
+      toast.success("Transaction added successfully")
     } catch (error) {
       console.error("Failed to add transaction:", error)
+      toast.error("Failed to add transaction. Please try again.")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -81,7 +106,7 @@ export default function Dashboard() {
               </svg>
             </div>
             <div className="mt-2">
-              <div className="text-2xl font-semibold">$0.00</div>
+              <div className="text-2xl font-semibold">${(totalIncome - totalExpenses).toFixed(2)}</div>
               <div className="text-xs text-gray-500">Current balance across all accounts</div>
             </div>
           </div>
@@ -142,17 +167,20 @@ export default function Dashboard() {
               <Label className="text-sm font-normal text-gray-900">Date</Label>
               <Input 
                 type="date" 
-                name="date"
+                value={formData.date}
+                onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
                 className="mt-1.5 h-9 rounded-md border border-gray-200 px-3 py-1 text-sm"
-                defaultValue={format(new Date(), 'yyyy-MM-dd')} 
               />
             </div>
 
             <div>
               <Label className="text-sm font-normal text-gray-900">Amount</Label>
               <Input 
-                type="text" 
-                name="amount"
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.amount}
+                onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
                 className="mt-1.5 h-9 rounded-md border border-gray-200 px-3 py-1 text-sm"
                 placeholder="0.00" 
               />
@@ -160,7 +188,7 @@ export default function Dashboard() {
 
             <div>
               <Label className="text-sm font-normal text-gray-900">Category</Label>
-              <Select name="category">
+              <Select value={formData.category} onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}>
                 <SelectTrigger className="mt-1.5 h-9 rounded-md border border-gray-200 px-3 py-1 text-sm">
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
@@ -175,7 +203,7 @@ export default function Dashboard() {
 
             <div>
               <Label className="text-sm font-normal text-gray-900">Account</Label>
-              <Select name="account">
+              <Select value={formData.account} onValueChange={(value) => setFormData(prev => ({ ...prev, account: value }))}>
                 <SelectTrigger className="mt-1.5 h-9 rounded-md border border-gray-200 px-3 py-1 text-sm">
                   <SelectValue placeholder="Select an account" />
                 </SelectTrigger>
@@ -190,7 +218,8 @@ export default function Dashboard() {
             <div>
               <Label className="text-sm font-normal text-gray-900">Description</Label>
               <Textarea 
-                name="description"
+                value={formData.description}
+                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 className="mt-1.5 min-h-[80px] rounded-md border border-gray-200 px-3 py-2 text-sm"
                 placeholder="Transaction details" 
               />
@@ -198,16 +227,21 @@ export default function Dashboard() {
 
             <div className="flex items-center justify-between pt-2">
               <div className="flex items-center gap-2">
-                <Switch name="expense" className="h-5 w-9" />
+                <Switch 
+                  checked={formData.isExpense}
+                  onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isExpense: checked }))}
+                  className="h-5 w-9" 
+                />
                 <Label className="text-sm font-normal text-gray-900">
                   Expense (money out)
                 </Label>
               </div>
               <Button 
                 type="submit"
-                className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+                disabled={isSubmitting}
+                className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
               >
-                Add Transaction
+                {isSubmitting ? 'Adding...' : 'Add Transaction'}
               </Button>
             </div>
           </form>
