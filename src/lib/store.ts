@@ -16,21 +16,57 @@ const byType = (doc: DocBase & { type: string }) => {
 
 const byTypeAndDate = (doc: DocBase & { type: string; date?: string }) => {
   if (doc.type === 'transaction' && doc.date) {
-    return [[doc.type, new Date(doc.date).getTime()]]
+    const timestamp = new Date(doc.date).getTime()
+    if (!isNaN(timestamp)) {
+      return [[doc.type, timestamp]]
+    }
   }
   return [[doc.type]]
 }
 
 const byCategory = (doc: DocBase & { type: string; category?: string; date?: string }) => {
   if (doc.type === 'transaction' && doc.category && doc.date) {
-    return [[doc.category, new Date(doc.date).getTime()]]
+    const timestamp = new Date(doc.date).getTime()
+    if (!isNaN(timestamp)) {
+      return [[doc.category, timestamp]]
+    }
   }
   return []
 }
 
 const byAccount = (doc: DocBase & { type: string; account?: string; date?: string }) => {
   if (doc.type === 'transaction' && doc.account && doc.date) {
-    return [[doc.account, new Date(doc.date).getTime()]]
+    const timestamp = new Date(doc.date).getTime()
+    if (!isNaN(timestamp)) {
+      return [[doc.account, timestamp]]
+    }
+  }
+  return []
+}
+
+const bySubcategory = (doc: DocBase & { type: string; subcategory?: string; date?: string }) => {
+  if (doc.type === 'transaction' && doc.subcategory && doc.date) {
+    const timestamp = new Date(doc.date).getTime()
+    if (!isNaN(timestamp)) {
+      return [[doc.subcategory, timestamp]]
+    }
+  }
+  return []
+}
+
+const byTags = (doc: DocBase & { type: string; tags?: string[]; date?: string }) => {
+  if (doc.type === 'transaction' && doc.tags && doc.date) {
+    const timestamp = new Date(doc.date).getTime()
+    if (!isNaN(timestamp)) {
+      return doc.tags.map(tag => [tag, timestamp])
+    }
+  }
+  return []
+}
+
+const byBudgetPeriod = (doc: DocBase & { type: string; period?: string }) => {
+  if (doc.type === 'budget' && doc.period) {
+    return [[doc.period]]
   }
   return []
 }
@@ -61,6 +97,16 @@ export function useTransactionsByAccount(account: string) {
   return useLiveQuery(byAccount, { key: [account], descending: true })
 }
 
+export function useTransactionsBySubcategory(subcategory: string) {
+  const { useLiveQuery } = useFireproof(db)
+  return useLiveQuery(bySubcategory, { key: [subcategory], descending: true })
+}
+
+export function useTransactionsByTag(tag: string) {
+  const { useLiveQuery } = useFireproof(db)
+  return useLiveQuery(byTags, { key: [tag], descending: true })
+}
+
 export function useCategories() {
   const { useLiveQuery } = useFireproof(db)
   return useLiveQuery(byType, { key: ['category'] })
@@ -74,6 +120,11 @@ export function useAccounts() {
 export function useBudgets() {
   const { useLiveQuery } = useFireproof(db)
   return useLiveQuery(byType, { key: ['budget'] })
+}
+
+export function useBudgetsByPeriod(period: string) {
+  const { useLiveQuery } = useFireproof(db)
+  return useLiveQuery(byBudgetPeriod, { key: [period] })
 }
 
 // Helper function to generate IDs
@@ -128,20 +179,26 @@ export const updateTransaction = (id: string, data: Partial<Omit<Transaction, '_
 export const addCategory = (data: Omit<Category, '_id' | 'type' | 'createdAt' | 'updatedAt'>) =>
   addDocument<Category>({ ...data, type: 'category' })
 
+export const updateCategory = (id: string, data: Partial<Omit<Category, '_id' | 'type' | 'createdAt' | 'updatedAt'>>) =>
+  updateDocument<Category>(id, data)
+
+export const deleteCategory = (id: string) =>
+  deleteDocument(id)
+
 export const addAccount = (data: Omit<Account, '_id' | 'type' | 'createdAt' | 'updatedAt'>) =>
   addDocument<Account>({ ...data, type: 'account' })
 
-export const addBudget = (data: Omit<Budget, '_id' | 'type' | 'createdAt' | 'updatedAt'>) =>
-  addDocument<Budget>({ ...data, type: 'budget' })
-
-export const updateAccount = (id: string, data: Partial<Account>) =>
+export const updateAccount = (id: string, data: Partial<Omit<Account, '_id' | 'type' | 'createdAt' | 'updatedAt'>>) =>
   updateDocument<Account>(id, data)
 
 export const deleteAccount = (id: string) =>
   deleteDocument(id)
 
-export const updateCategory = (id: string, data: Partial<Category>) =>
-  updateDocument<Category>(id, data)
+export const addBudget = (data: Omit<Budget, '_id' | 'type' | 'createdAt' | 'updatedAt'>) =>
+  addDocument<Budget>({ ...data, type: 'budget' })
 
-export const deleteCategory = (id: string) =>
+export const updateBudget = (id: string, data: Partial<Omit<Budget, '_id' | 'type' | 'createdAt' | 'updatedAt'>>) =>
+  updateDocument<Budget>(id, data)
+
+export const deleteBudget = (id: string) =>
   deleteDocument(id) 
