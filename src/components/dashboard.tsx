@@ -92,22 +92,22 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 md:p-6">
       <div className="grid gap-6 md:grid-cols-2">
         {/* Left column */}
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold mb-2">Welcome to SpendSage!</h2>
+            <h2 className="text-xl md:text-2xl font-bold mb-2">Welcome to SpendSage!</h2>
             <p className="text-sm text-gray-500">
               Track your finances, achieve your goals, and watch your money tree grow. All your data is stored locally and syncs automatically when you're online.
             </p>
           </div>
 
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="text-lg font-semibold mb-4">Your Financial Forest 🌳</h3>
+          <div className="rounded-lg border bg-card p-4 md:p-6">
+            <h3 className="text-base md:text-lg font-semibold mb-4">Your Financial Forest 🌳</h3>
             <MoneyTree savings={netSavings} goal={savingsGoal} />
             <div className="mt-4 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-xs md:text-sm text-gray-600">
                 Watch your tree grow as you save! Set a goal in settings to get started.
               </p>
             </div>
@@ -116,41 +116,41 @@ export default function Dashboard() {
 
         {/* Right column */}
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-lg border p-4">
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
+            <div className="rounded-lg border p-3 md:p-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium">Total Balance</h3>
-                <span className="text-2xl">💰</span>
+                <h3 className="text-xs md:text-sm font-medium">Total Balance</h3>
+                <span className="text-xl md:text-2xl">💰</span>
               </div>
               <div className="mt-2">
-                <div className="text-2xl font-semibold">${(totalIncome - totalExpenses).toFixed(2)}</div>
+                <div className="text-lg md:text-2xl font-semibold">${(totalIncome - totalExpenses).toFixed(2)}</div>
                 <div className="text-xs text-gray-500">Current balance</div>
               </div>
             </div>
 
-            <div className="rounded-lg border p-4">
+            <div className="rounded-lg border p-3 md:p-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium">Net Savings</h3>
-                <span className="text-2xl">🎯</span>
+                <h3 className="text-xs md:text-sm font-medium">Net Savings</h3>
+                <span className="text-xl md:text-2xl">🎯</span>
               </div>
               <div className="mt-2">
-                <div className="text-2xl font-semibold text-green-500">${netSavings.toFixed(2)}</div>
+                <div className="text-lg md:text-2xl font-semibold text-green-500">${netSavings.toFixed(2)}</div>
                 <div className="text-xs text-gray-500">Total savings</div>
               </div>
             </div>
           </div>
 
-          <div className="rounded-lg border p-6">
+          <div className="rounded-lg border p-4 md:p-6">
             <Tabs defaultValue="quick-entry" className="space-y-4">
-              <TabsList className="w-full">
-                <TabsTrigger value="quick-entry" className="flex-1">
-                  <span className="mr-2">⚡</span> Quick Entry
+              <TabsList className="w-full grid grid-cols-3 h-auto">
+                <TabsTrigger value="quick-entry" className="flex-1 text-xs md:text-sm py-2">
+                  <span className="mr-1 md:mr-2">⚡</span> <span className="hidden md:inline">Quick</span> Entry
                 </TabsTrigger>
-                <TabsTrigger value="overview" className="flex-1">
-                  <span className="mr-2">📋</span> Overview
+                <TabsTrigger value="overview" className="flex-1 text-xs md:text-sm py-2">
+                  <span className="mr-1 md:mr-2">📋</span> Overview
                 </TabsTrigger>
-                <TabsTrigger value="reports" className="flex-1">
-                  <span className="mr-2">📊</span> Reports
+                <TabsTrigger value="reports" className="flex-1 text-xs md:text-sm py-2">
+                  <span className="mr-1 md:mr-2">📊</span> Reports
                 </TabsTrigger>
               </TabsList>
 

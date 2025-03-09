@@ -72,16 +72,16 @@ export default function CSVImport() {
           Import your data from CSV files. Download sample files to see the required format.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Select Import Type</label>
+          <label className="text-xs sm:text-sm font-medium">Select Import Type</label>
           <Select value={selectedType} onValueChange={(value) => setSelectedType(value as ImportType)}>
-            <SelectTrigger>
+            <SelectTrigger className="h-9 sm:h-10">
               <SelectValue placeholder="Select type to import" />
             </SelectTrigger>
             <SelectContent>
               {IMPORT_TYPES.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
+                <SelectItem key={type.value} value={type.value} className="text-sm">
                   {type.label}
                 </SelectItem>
               ))}
@@ -89,17 +89,17 @@ export default function CSVImport() {
           </Select>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
           <Button
             variant="outline"
             onClick={downloadSample}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 h-9 sm:h-10 text-xs sm:text-sm"
           >
             <Download className="h-4 w-4" />
             Download Sample
           </Button>
 
-          <div className="relative">
+          <div className="relative flex-1 sm:flex-none">
             <input
               type="file"
               accept=".csv"
@@ -109,7 +109,7 @@ export default function CSVImport() {
             />
             <Button
               variant="default"
-              className="flex items-center gap-2"
+              className="w-full sm:w-auto flex items-center gap-2 h-9 sm:h-10 text-xs sm:text-sm"
               disabled={isImporting}
             >
               <Upload className="h-4 w-4" />

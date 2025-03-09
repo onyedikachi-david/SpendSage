@@ -66,20 +66,20 @@ export function TransactionForm({ initialData, onSubmit }: TransactionFormProps)
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 w-full max-w-lg mx-auto">
         <FormField
           control={form.control}
           name="date"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date</FormLabel>
+              <FormLabel className="text-sm md:text-base">Date</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-full pl-3 text-left font-normal",
+                        "w-full pl-3 text-left font-normal text-sm md:text-base h-9 md:h-10",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -114,9 +114,13 @@ export function TransactionForm({ initialData, onSubmit }: TransactionFormProps)
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel className="text-sm md:text-base">Amount</FormLabel>
               <FormControl>
-                <Input placeholder="0.00" {...field} />
+                <Input 
+                  placeholder="0.00" 
+                  {...field} 
+                  className="h-9 md:h-10 text-sm md:text-base"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -128,16 +132,20 @@ export function TransactionForm({ initialData, onSubmit }: TransactionFormProps)
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category</FormLabel>
+              <FormLabel className="text-sm md:text-base">Category</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-9 md:h-10 text-sm md:text-base">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {categories.map((category) => (
-                    <SelectItem key={category._id} value={category._id}>
+                    <SelectItem 
+                      key={category._id} 
+                      value={category._id}
+                      className="text-sm md:text-base"
+                    >
                       {category.name}
                     </SelectItem>
                   ))}
@@ -153,16 +161,20 @@ export function TransactionForm({ initialData, onSubmit }: TransactionFormProps)
           name="account"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Account</FormLabel>
+              <FormLabel className="text-sm md:text-base">Account</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-9 md:h-10 text-sm md:text-base">
                     <SelectValue placeholder="Select an account" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {accounts.map((account) => (
-                    <SelectItem key={account._id} value={account._id}>
+                    <SelectItem 
+                      key={account._id} 
+                      value={account._id}
+                      className="text-sm md:text-base"
+                    >
                       {account.name}
                     </SelectItem>
                   ))}
@@ -178,9 +190,13 @@ export function TransactionForm({ initialData, onSubmit }: TransactionFormProps)
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel className="text-sm md:text-base">Description</FormLabel>
               <FormControl>
-                <Input placeholder="Enter description" {...field} />
+                <Input 
+                  placeholder="Enter description" 
+                  {...field} 
+                  className="h-9 md:h-10 text-sm md:text-base"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -192,19 +208,19 @@ export function TransactionForm({ initialData, onSubmit }: TransactionFormProps)
           name="isExpense"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Type</FormLabel>
+              <FormLabel className="text-sm md:text-base">Type</FormLabel>
               <Select
                 onValueChange={(value) => field.onChange(value === "expense")}
                 defaultValue={field.value ? "expense" : "income"}
               >
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-9 md:h-10 text-sm md:text-base">
                     <SelectValue placeholder="Select transaction type" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="expense">Expense</SelectItem>
-                  <SelectItem value="income">Income</SelectItem>
+                  <SelectItem value="expense" className="text-sm md:text-base">Expense</SelectItem>
+                  <SelectItem value="income" className="text-sm md:text-base">Income</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -212,7 +228,7 @@ export function TransactionForm({ initialData, onSubmit }: TransactionFormProps)
           )}
         />
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full h-9 md:h-10 text-sm md:text-base">
           {initialData ? "Update" : "Add"} Transaction
         </Button>
       </form>

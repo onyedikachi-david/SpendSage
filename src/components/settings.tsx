@@ -595,13 +595,14 @@ export default function Settings() {
                 Export your data or import data from other sources
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between">
-                <div className="space-x-2">
+            <CardContent className="space-y-6">
+              <div className="flex flex-col sm:flex-row gap-4 sm:justify-between">
+                <div className="flex flex-wrap gap-2">
                   <Button 
                     variant="secondary"
                     onClick={handlePopulateData}
                     disabled={isPopulating}
+                    className="flex-1 sm:flex-none"
                   >
                     {isPopulating ? "Populating..." : "Add Test Data"}
                   </Button>
@@ -611,11 +612,12 @@ export default function Settings() {
                       <Button
                         variant="destructive"
                         disabled={isPopulating}
+                        className="flex-1 sm:flex-none"
                       >
                         Clear & Populate
                       </Button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent>
+                    <AlertDialogContent className="sm:max-w-[425px]">
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -623,8 +625,8 @@ export default function Settings() {
                           This action cannot be undone.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+                        <AlertDialogCancel className="mt-2 sm:mt-0">Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={handleClearAndPopulate}
                           className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -640,11 +642,12 @@ export default function Settings() {
                       <Button
                         variant="destructive"
                         disabled={isPopulating}
+                        className="flex-1 sm:flex-none"
                       >
                         Clear Data
                       </Button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent>
+                    <AlertDialogContent className="sm:max-w-[425px]">
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -652,8 +655,8 @@ export default function Settings() {
                           This action cannot be undone.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+                        <AlertDialogCancel className="mt-2 sm:mt-0">Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={async () => {
                             try {
@@ -677,19 +680,23 @@ export default function Settings() {
                   </AlertDialog>
                 </div>
 
-                <Button onClick={handleExportData} variant="outline">
+                <Button 
+                  onClick={handleExportData} 
+                  variant="outline"
+                  className="w-full sm:w-auto"
+                >
                   Export All Data
                 </Button>
               </div>
 
               {isPopulating && currentStep && (
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
+                  <div className="flex justify-between text-xs sm:text-sm">
                     <span>{currentStep.message}</span>
                     <span>{currentStep.progress}%</span>
                   </div>
                   <Progress value={currentStep.progress} className="h-2" />
-                  <p className="text-sm text-muted-foreground italic animate-pulse">
+                  <p className="text-xs sm:text-sm text-muted-foreground italic animate-pulse">
                     {currentStep.dramaticMessage}
                   </p>
                 </div>

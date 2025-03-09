@@ -203,22 +203,22 @@ export default function Reports() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Reports</h2>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Reports</h2>
           <p className="text-muted-foreground">
             Generate and analyze financial reports
           </p>
         </div>
-        <Button onClick={handleExport}>
+        <Button onClick={handleExport} className="w-full md:w-auto">
           <Download className="h-4 w-4 mr-2" />
           Export Report
         </Button>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex flex-col md:flex-row gap-4">
         <Select value={reportType} onValueChange={setReportType}>
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-full md:w-[200px]">
             <SelectValue placeholder="Select report type" />
           </SelectTrigger>
           <SelectContent>
@@ -231,15 +231,15 @@ export default function Reports() {
         </Select>
 
         {reportType !== "tax-report" ? (
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" className="w-full md:w-auto justify-start">
                   <CalendarIcon className="h-4 w-4 mr-2" />
                   {format(startDate, "MMM d, yyyy")}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   selected={startDate}
@@ -249,12 +249,12 @@ export default function Reports() {
             </Popover>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" className="w-full md:w-auto justify-start">
                   <CalendarIcon className="h-4 w-4 mr-2" />
                   {format(endDate, "MMM d, yyyy")}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   selected={endDate}
@@ -268,7 +268,7 @@ export default function Reports() {
             value={selectedYear}
             onValueChange={setSelectedYear}
           >
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="w-full md:w-[120px]">
               <SelectValue placeholder="Select year" />
             </SelectTrigger>
             <SelectContent>
@@ -287,34 +287,34 @@ export default function Reports() {
 
       {reportType === "income-statement" && (
         <div className="space-y-6">
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             <Card>
-              <CardHeader>
-                <CardTitle>Total Income</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Total Income</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">
+              <CardContent className="p-4 md:p-6 pt-0">
+                <div className="text-xl md:text-2xl font-bold text-green-600">
                   ${totalIncome.toFixed(2)}
                 </div>
               </CardContent>
             </Card>
             <Card>
-              <CardHeader>
-                <CardTitle>Total Expenses</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Total Expenses</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-red-600">
+              <CardContent className="p-4 md:p-6 pt-0">
+                <div className="text-xl md:text-2xl font-bold text-red-600">
                   ${totalExpenses.toFixed(2)}
                 </div>
               </CardContent>
             </Card>
             <Card>
-              <CardHeader>
-                <CardTitle>Net Income</CardTitle>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Net Income</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4 md:p-6 pt-0">
                 <div
-                  className={`text-2xl font-bold ${
+                  className={`text-xl md:text-2xl font-bold ${
                     netIncome >= 0 ? "text-green-600" : "text-red-600"
                   }`}
                 >
@@ -325,27 +325,38 @@ export default function Reports() {
           </div>
 
           <Card>
-            <CardHeader>
-              <CardTitle>Monthly Overview</CardTitle>
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="text-base md:text-lg">Monthly Overview</CardTitle>
             </CardHeader>
-            <CardContent className="h-[400px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={getMonthlyData()}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip
-                    formatter={(value: number) =>
-                      new Intl.NumberFormat("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      }).format(value)
-                    }
-                  />
-                  <Bar dataKey="income" name="Income" fill="#4CAF50" />
-                  <Bar dataKey="expenses" name="Expenses" fill="#F44336" />
-                </BarChart>
-              </ResponsiveContainer>
+            <CardContent className="p-0 md:p-4">
+              <div className="h-[300px] md:h-[400px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={getMonthlyData()}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                      dataKey="month" 
+                      tick={{ fontSize: 12 }}
+                      angle={-45}
+                      textAnchor="end"
+                      height={60}
+                    />
+                    <YAxis 
+                      tick={{ fontSize: 12 }}
+                      width={80}
+                    />
+                    <Tooltip
+                      formatter={(value: number) =>
+                        new Intl.NumberFormat("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        }).format(value)
+                      }
+                    />
+                    <Bar dataKey="income" name="Income" fill="#4CAF50" />
+                    <Bar dataKey="expenses" name="Expenses" fill="#F44336" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -354,43 +365,46 @@ export default function Reports() {
       {reportType === "expense-report" && (
         <div className="space-y-6">
           <Card>
-            <CardHeader>
-              <CardTitle>Expense Distribution</CardTitle>
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="text-base md:text-lg">Expense Distribution</CardTitle>
             </CardHeader>
-            <CardContent className="h-[400px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={categoryChartData}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={150}
-                    label={(entry) => `${entry.name} (${((entry.value / totalExpenses) * 100).toFixed(1)}%)`}
-                  >
-                    {categoryChartData.map((entry) => (
-                      <Cell key={entry.name} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    formatter={(value: number) =>
-                      new Intl.NumberFormat("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      }).format(value)
-                    }
-                  />
-                </PieChart>
-              </ResponsiveContainer>
+            <CardContent className="p-0 md:p-4">
+              <div className="h-[300px] md:h-[400px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={categoryChartData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius="80%"
+                      label={(entry) => `${entry.name} (${((entry.value / totalExpenses) * 100).toFixed(1)}%)`}
+                      labelLine={false}
+                    >
+                      {categoryChartData.map((entry) => (
+                        <Cell key={entry.name} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(value: number) =>
+                        new Intl.NumberFormat("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        }).format(value)
+                      }
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
             </CardContent>
           </Card>
 
           <Card>
-            <CardHeader>
-              <CardTitle>Expense Details</CardTitle>
+            <CardHeader className="p-4 md:p-6">
+              <CardTitle className="text-base md:text-lg">Expense Details</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0 md:p-4">
               <Table>
                 <TableHeader>
                   <TableRow>
