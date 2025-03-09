@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
 import { Toaster } from "sonner"
+import { AchievementsPage } from "@/components/achievements/AchievementsPage"
 
 export default function App() {
   return (
@@ -34,7 +35,7 @@ export default function App() {
                   "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
                 )}
               >
-                Dashboard
+                <span className="mr-2">📊</span> Dashboard
               </TabsTrigger>
               <TabsTrigger 
                 value="transactions"
@@ -42,7 +43,7 @@ export default function App() {
                   "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
                 )}
               >
-                Transactions
+                <span className="mr-2">💸</span> Transactions
               </TabsTrigger>
               <TabsTrigger 
                 value="analytics"
@@ -50,7 +51,7 @@ export default function App() {
                   "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
                 )}
               >
-                Analytics
+                <span className="mr-2">📈</span> Analytics
               </TabsTrigger>
               <TabsTrigger 
                 value="budgets"
@@ -58,7 +59,15 @@ export default function App() {
                   "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
                 )}
               >
-                Budgets
+                <span className="mr-2">💰</span> Budgets
+              </TabsTrigger>
+              <TabsTrigger 
+                value="achievements"
+                className={cn(
+                  "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                )}
+              >
+                <span className="mr-2">🏆</span> Achievements
               </TabsTrigger>
               <TabsTrigger 
                 value="settings"
@@ -66,7 +75,7 @@ export default function App() {
                   "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
                 )}
               >
-                Settings
+                <span className="mr-2">⚙️</span> Settings
               </TabsTrigger>
             </TabsList>
             <TabsContent value="dashboard" className="space-y-4">
@@ -80,6 +89,9 @@ export default function App() {
             </TabsContent>
             <TabsContent value="budgets" className="space-y-4">
               <Budgets />
+            </TabsContent>
+            <TabsContent value="achievements" className="space-y-4">
+              <AchievementsPage />
             </TabsContent>
             <TabsContent value="settings" className="space-y-4">
               <Settings />

@@ -37,8 +37,7 @@ export default function BudgetForm({ onComplete, presetCategory }: BudgetFormPro
     try {
       await addBudget({
         ...formData,
-        amount: parseFloat(formData.amount),
-        type: 'budget'
+        amount: parseFloat(formData.amount)
       })
       onComplete?.()
     } catch (error) {

@@ -12,13 +12,11 @@ export interface Transaction extends DocBase {
   date: string
   amount: number
   category: string
-  subcategory?: string
   account: string
   description: string
-  tags?: string[]
   isExpense: boolean
-  createdAt: string
-  updatedAt: string
+  tags?: string[]
+  subcategory?: string
 }
 
 export interface Category extends DocBase {
@@ -28,8 +26,6 @@ export interface Category extends DocBase {
   icon: string
   parent: string | null
   subcategories?: string[]
-  createdAt: string
-  updatedAt: string
 }
 
 export interface Account extends DocBase {
@@ -38,8 +34,6 @@ export interface Account extends DocBase {
   initialBalance: number
   icon: string
   color: string
-  createdAt: string
-  updatedAt: string
 }
 
 export interface Budget extends DocBase {
@@ -47,8 +41,6 @@ export interface Budget extends DocBase {
   category: string
   amount: number
   period: string // Format: YYYY-MM
-  createdAt: string
-  updatedAt: string
 }
 
 export type DocumentTypes = Transaction | Category | Account | Budget 
