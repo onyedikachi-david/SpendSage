@@ -27,7 +27,7 @@ import {
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
-import { useCategories, useAccounts } from "@/hooks/useFireproofHooks"
+import { useCategories, useAccounts } from "@/lib/store"
 import type { Transaction, Category, Account } from "@/types"
 
 const transactionSchema = z.object({

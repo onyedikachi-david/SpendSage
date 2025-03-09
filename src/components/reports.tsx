@@ -507,13 +507,14 @@ export default function Reports() {
             const accountExpenses = accountTransactions
               .filter((t) => t.isExpense)
               .reduce((sum, t) => sum + t.amount, 0)
+            const currentBalance = account.initialBalance + accountIncome - accountExpenses
 
             return (
               <Card key={account._id}>
                 <CardHeader>
                   <CardTitle>{account.name}</CardTitle>
                   <CardDescription>
-                    Current Balance: ${account.balance.toFixed(2)}
+                    Current Balance: ${currentBalance.toFixed(2)}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
