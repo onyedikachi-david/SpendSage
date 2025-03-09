@@ -1,54 +1,136 @@
-# React + TypeScript + Vite
+# SpendSage - Personal Finance Management Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+SpendSage is a modern, offline-first personal finance management application built with React, TypeScript, and Fireproof. It helps users track expenses, manage budgets, analyze spending patterns, and make informed financial decisions.
 
-Currently, two official plugins are available:
+![SpendSage Logo](src/assets/logo.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+### 1. Financial Dashboard
+- Quick transaction entry with date picker
+- Real-time financial overview
+- Recent transactions list
+- Summary widgets showing income, expenses, and savings
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 2. Transaction Management
+- Add, edit, and delete transactions
+- Categorize expenses and income
+- Multiple account support
+- Detailed transaction history
+- CSV import/export functionality
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 3. Budget Management
+- Set monthly budgets by category
+- Track budget vs. actual spending
+- Visual progress indicators
+- Budget alerts and notifications
+
+### 4. Analytics & Reporting
+- Interactive charts and visualizations
+- Expense breakdown by category
+- Income vs. expense analysis
+- Savings growth tracking
+- Cash flow analysis
+- Custom date range filtering
+
+### 5. Data Visualization Components
+- Cash Flow Waterfall Chart
+- Savings Growth Stacked Area Chart
+- Budget Performance Radar Chart
+- Category Distribution Pie Chart
+- Monthly Trends Bar Chart
+
+### 6. Offline-First Architecture
+- Works without internet connection
+- Automatic data synchronization
+- Real-time sync status indicator
+- Data persistence across sessions
+
+## Technology Stack
+
+- **Frontend Framework:** React with TypeScript
+- **Build Tool:** Vite
+- **UI Components:** shadcn/ui
+- **Styling:** Tailwind CSS
+- **Charts:** Recharts
+- **Database:** Fireproof (offline-first, embedded document database)
+- **Date Handling:** date-fns
+- **Form Management:** React Hook Form
+- **Notifications:** Sonner
+- **Icons:** Lucide React
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- pnpm (v9 or higher)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/onyedikachi-david/spendsage.git
+   cd spendsage
+   ```
+
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+3. Start the development server:
+   ```bash
+   pnpm dev
+   ```
+
+4. Open [http://localhost:5173](http://localhost:5173) in your browser
+
+### Building for Production
+
+```bash
+pnpm build
+pnpm preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
 ```
+src/
+├── assets/         # Static assets and images
+├── components/     # React components
+│   ├── ui/        # Reusable UI components
+│   └── visualizations/ # Chart components
+├── contexts/      # React contexts
+├── hooks/         # Custom React hooks
+├── lib/          # Utility functions and store
+├── store/        # State management
+├── types/        # TypeScript type definitions
+└── layouts/      # Page layouts
+```
+
+## Key Components
+
+- `Dashboard.tsx`: Main dashboard with quick entry and overview
+- `Analytics.tsx`: Data visualization and analysis
+- `Budgets.tsx`: Budget management interface
+- `Settings.tsx`: Application settings and data management
+- `Transactions.tsx`: Transaction history and management
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful UI components
+- [Fireproof](https://fireproof.storage/) for the offline-first database
+- [Recharts](https://recharts.org/) for the charting library
